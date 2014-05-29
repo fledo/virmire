@@ -1,9 +1,13 @@
-# What is virmire?
-Virmire is a PowerShell script which allows users to configure global *ctrl+alt+key* hotkeys to open folder or folders. *Ctrl+alt+F* could open Firefox and *ctrl+alt+c* could open the command prompt. This can be achieved from cammondline or via a GUI. The GUI also gives an overview which actions are bound to which keys.
+## What is virmire?
+**Virmire** is a PowerShell script which allows users to configure global **ctrl+alt+key** hotkeys to open folder or folders. **Ctrl+alt+F** could open **Firefox** and **ctrl+alt+c** could open the **command prompt**. This can be achieved from commandline or via a GUI. The GUI also gives an overview to which actions are bound to which keys.
 
 ## How?
-Virmire uses the [PsEventingPlus](http://pseventing.codeplex.com/releases/view/66587) to register global hotkeys. The module is not included and needs to be downloaded separately. Registered hotkeys are saved in *%appdata%* and used by a background process which listens to the activated hotkeys.
+Virmire uses [PsEventingPlus](http://pseventing.codeplex.com/releases/view/66587) to register global hotkeys. The module is not included and needs to be downloaded separately. Registered hotkeys are saved in *%appdata%* and used by a background process which listens to the activated hotkeys.
 
+## Todo
+ - Option to autostart the background listener process when a users signs in.
+ - Provide help on how to use the GUI + link to github.
+ 
 ## Know issues and dependencies 
  - Virmire requires [PsEventingPlus module](http://pseventing.codeplex.com/releases/view/66587) which is released under the following [license](http://pseventing.codeplex.com/license).
  - Global hotkeys will not work if they were registered in an elevated instance of PowerShell and you have UAC enabled. Use an unelevated instance of PowerShell 
