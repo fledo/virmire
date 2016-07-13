@@ -1,6 +1,6 @@
-# Paths
+# Path/files
 $Appdata = "$env:APPDATA\Virmire"
-$DataFile = "$Appdata\settings.csv"
+$SettingsFile = "$Appdata\settings.csv"
 $PidFile = "$Appdata\pid.txt"
 $ListenerFile = "$Appdata\listener.ps1"
 
@@ -25,32 +25,25 @@ using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace System
-{
-	public class IconExtractor
-	{
-
-	 public static Icon Extract(string file, int number, bool largeIcon)
-	 {
-	  IntPtr large;
-	  IntPtr small;
-	  ExtractIconEx(file, number, out large, out small, 1);
-	  try
-	  {
-	   return Icon.FromHandle(largeIcon ? large : small);
-	  }
-	  catch
-	  {
-	   return null;
-	  }
-
-	 }
-	 [DllImport("Shell32.dll", EntryPoint = "ExtractIconExW", CharSet = CharSet.Unicode, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
-	 private static extern int ExtractIconEx(string sFile, int iIndex, out IntPtr piLargeVersion, out IntPtr piSmallVersion, int amountIcons);
-
+namespace System {
+    public class IconExtractor {
+        public static Icon Extract(string file, int number, bool largeIcon) {
+	       IntPtr large;
+	       IntPtr small;
+	       ExtractIconEx(file, number, out large, out small, 1);
+	       try {
+	           return Icon.FromHandle(largeIcon ? large : small);
+	       } 
+           catch {
+	           return null;
+           }
+	   }
+	   [DllImport("Shell32.dll", EntryPoint = "ExtractIconExW", CharSet = CharSet.Unicode, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
+	   private static extern int ExtractIconEx(string sFile, int iIndex, out IntPtr piLargeVersion, out IntPtr piSmallVersion, int amountIcons);
 	}
 }
 "@
+
 <#
     .SYNOPSIS
     Update button caption and image
@@ -145,17 +138,17 @@ Function Choose-Folder {
     Save script settings.
 
     .DESCRIPTION
-    Saves the current settings to $Datafile and reloads the listener.
+    Saves the current settings to $SettingsFile and reloads the listener.
 
     .EXAMPLE
-    Save-Data
+    Save-Settings
 #>
-Function Save-Data {
+Function Save-Settings {
     $Output = @()
     Foreach ($object in $Buttons) {
         $Output += New-Object -TypeName PSObject -Property @{Key=$object.Key; Target=$object.Target; Status = $object.Status}
     }
-    $Output | Export-Csv $DataFile -Force
+    $Output | Export-Csv $SettingsFile -Force
     Load-Listener
 }
 
@@ -179,9 +172,8 @@ Function Show-GUI {
     $Form.StartPosition = "CenterScreen"
     $Form.BackColor = [System.Drawing.Color]::DarkGray
 
-    $Font = New-Object System.Drawing.Font("Arial",18)
-
     # Label
+    $Font = New-Object System.Drawing.Font("Arial",18)
     $title = New-Object System.Windows.Forms.Label
     $title.Text = "Choose a hotkey for CTRL + ALT"
     $title.Width = 450
@@ -235,6 +227,7 @@ Function Show-GUI {
         $left += 110
     }
     
+    # Help button
     $help = New-Object System.Windows.Forms.Button
     $help.BackColor = [System.Drawing.Color]::LightGray
     #$help.FlatStyle = [System.Windows.Forms.FlatStyle]::Popup
@@ -249,6 +242,7 @@ Function Show-GUI {
     })
     $Form.Controls.Add($help)
     
+    # Reset button
     $remove = New-Object System.Windows.Forms.Button
     $remove.BackColor = [System.Drawing.Color]::LightGray
     $remove.Text = "Reset keys"
@@ -267,6 +261,7 @@ Function Show-GUI {
     })
     $Form.Controls.Add($remove)
     
+    # Start listener button
     $start = New-Object System.Windows.Forms.Button
     $start.BackColor = [System.Drawing.Color]::LightGray
     $start.ForeColor = [System.Drawing.Color]::DarkGreen
@@ -280,6 +275,7 @@ Function Show-GUI {
     })
     $Form.Controls.Add($start)
     
+    # Stop listener button
     $stop = New-Object System.Windows.Forms.Button
     $stop.BackColor = [System.Drawing.Color]::LightGray
     $stop.ForeColor = [System.Drawing.Color]::DarkRed
@@ -289,10 +285,11 @@ Function Show-GUI {
     $stop.Top = 10
     $stop.Left = 780
     $stop.Add_Click({
-        Kill-Listener
+        Stop-Listener
     })
     $Form.Controls.Add($stop)
     
+    # Save button
     $save = New-Object System.Windows.Forms.Button
     $save.BackColor = [System.Drawing.Color]::LightGray
     $save.Text = "Save"
@@ -301,11 +298,12 @@ Function Show-GUI {
     $save.Top = 10
     $save.Left = 890
     $save.Add_Click({
-        Save-Data
-        [System.Windows.Forms.MessageBox]::Show("Data saved to $DataFile")
+        Save-Settings
+        [System.Windows.Forms.MessageBox]::Show("Data saved to $SettingsFile")
     })
     $Form.Controls.Add($save)
     
+    # Exit button
     $exit = New-Object System.Windows.Forms.Button
     $exit.BackColor = [System.Drawing.Color]::LightGray
     $exit.Text = "Exit"
@@ -318,7 +316,7 @@ Function Show-GUI {
     })
     $Form.Controls.Add($exit)
     
-    $Form.ShowDialog() > $null
+    #$Form.ShowDialog() > $null
 }
 
 <#
@@ -329,9 +327,9 @@ Function Show-GUI {
     Stop the process with ID from $Appdata\pid
 
     .EXAMPLE
-    Kill-Listener
+    Stop-Listener
 #>
-Function Kill-Listener {
+Function Stop-Listener {
     sleep -Milliseconds 1000
     $id = Get-Content $PidFile -ErrorAction SilentlyContinue
     if ($id) {
@@ -353,7 +351,7 @@ Function Kill-Listener {
     Set-Defaults
 #>
 function Set-Defaults {
-    Kill-Listener
+    Stop-Listener
     Remove-Item $Appdata -Force -Recurse -ErrorAction SilentlyContinue
     New-Item $Appdata -type directory -Force > $null
     $Data = @()
@@ -361,7 +359,7 @@ function Set-Defaults {
     foreach ($key in $Keys) {
         $Data += New-Object -TypeName PSObject -Property @{Key=$key; Target="null"; Status = $False}
     }
-    $Data | Export-Csv $DataFile -Force
+    $Data | Export-Csv $SettingsFile -Force
 }
 
 <#
@@ -418,8 +416,8 @@ function Load-Module {
 #>
 function Load-Listener {
     # Make sure we have the required module and that the previous Listener is dead
-    Load-Module -Module pseventingplus -Web pseventing.codeplex.com/releases/view/66587 -Name "The background Listener process"   
-    Kill-Listener
+    Load-Module -Module pseventingplus -Web pseventing.codeplex.com/releases/view/66587 -Name "The background Listener process"
+    Stop-Listener
     $Data = Import-Csv $SettingsFile
     "import-module pseventingplus" | Out-File -FilePath $ListenerFile -Force -Encoding UTF8
     Foreach ($object in $Data) {
@@ -437,7 +435,7 @@ function Load-Listener {
 # Check for version 3+ of powershell, required by "Add-Member -NotePropertyName" 
 if ($PSVersionTable.PSVersion.Major -le 3) {
     Write-error "Detected version $($PSVersionTable.PSVersion.Major) of PowerShell. This script requires version 3."
-    #exit
+    exit
 }
 
 Add-Type -TypeDefinition $FolderIcon -ReferencedAssemblies System.Drawing
@@ -448,5 +446,5 @@ $global:Buttons = @() # Why is this global!?
 if (-not (Test-Path $Appdata)) {
     Set-Defaults
 }
-$Data = Import-Csv $DataFile
+$Data = Import-Csv $SettingsFile
 Show-GUI
