@@ -1,16 +1,30 @@
-## What is virmire?
-**Virmire** is a PowerShell script which allows users to configure global `ctrl`+`alt`+`"key"` hotkeys to open folder or folders. `Ctrl`+`alt`+`F` could open **Firefox** and `ctrl`+`alt`+`c` could open the **command prompt**. This can be achieved ~~from commandline or~~ via a GUI. The GUI also gives an overview to which actions are bound to which keys.
+What is Virmire?
+----------------
 
-## How?
-Virmire uses [PsEventingPlus](http://pseventing.codeplex.com/releases/view/66587) to register global hotkeys. The module is not included and needs to be downloaded separately. Registered hotkeys are by default saved in `%appdata%` and used by a background process which listens to the activated hotkeys.
+Virmire allows users to configure global hotkeys to open files or folders. `Ctrl`+`alt`+`F` could open **Firefox** and `ctrl`+`alt`+`c` could open the **command prompt**.
 
-## Todo
- - Option to autostart the background listener process when a users signs in.
- - Provide help on how to use the GUI + link to github.
+How?
+----
+
+Virmire is written in PowerShell (and thus only works on Windows) and relies on the module [PsEventingPlus](http://pseventing.codeplex.com/releases/view/66587) to register global hotkeys. Settings are by default saved in `%appdata%\virmire` and are used to create a separateba background process which listens for the configured hotkeys.
  
-## Know issues and dependencies 
- - Virmire requires [PsEventingPlus module](http://pseventing.codeplex.com/releases/view/66587) which is released under the following [license](http://pseventing.codeplex.com/license).
- - Global hotkeys will not work if they were registered in an elevated instance of PowerShell and you have UAC enabled. Use an unelevated instance of PowerShell 
+Dependencies
+------------
+
+ - PowerShell 3+
+ - [PsEventingPlus module](http://pseventing.codeplex.com/releases/view/66587) which is released under the following [license](http://pseventing.codeplex.com/license).
+
+Known issues
+------------
+
+ - Global hotkeys will not work if they were registered in an elevated instance of PowerShell and you have UAC enabled. Use an unelevated instance of PowerShell.
+
+Todo
+----
+
+ - Option to autostart the background listener process when a users signs in.
+ - Provide instructions on how to use the GUI.
+ - Provide example configuration.
 
 ## License
 
