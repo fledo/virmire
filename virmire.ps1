@@ -415,18 +415,18 @@ function Load-Listener {
     # Make sure we have the required module and that the previous Listener is dead
     Load-Module -Module pseventingplus -Web pseventing.codeplex.com/releases/view/66587 -Name "The background Listener process"   
     Kill-Listener
-    $Data = Import-Csv $DataFile
-    "import-module pseventingplus" | Out-File -FilePath $ListenerFile -Force
+    $Data = Import-Csv $SettingsFile
+    "import-module pseventingplus" | Out-File -FilePath $ListenerFile -Force -Encoding UTF8
     Foreach ($object in $Data) {
         if ($object.Status -eq $True){
-            Add-Content -Value "register-hotkeyevent 'ctrl+alt+$($object.Key)' -action  { start '$($object.Target)' } -global" -Path $ListenerFile
+            Add-Content -Value "register-hotkeyevent 'ctrl+alt+$($object.Key)' -action  { start '$($object.Target)' } -global" -Path $ListenerFile 
         }
     }
-    Add-Content -Value 'write-host "Keys registered. Do not close this window.`nPID: $pid. Saved to $Appdata\pid.txt"' -Path $ListenerFile
-    Add-Content -Value '$pid | Out-File -FilePath "$Appdata\pid.txt" -Force' -Path $ListenerFile
+    Add-Content -Value "`$pid | Out-File -FilePath '$Appdata\pid.txt' -Force" -Path $ListenerFile
+    Add-Content -Value "write-host `"Keys registered. Do not close this window.``nPID: `$pid. Saved to $Appdata\pid.txt`"" -Path $ListenerFile
     
     # Start the Listener. Keep alive and hidden.
-    start-process powershell.exe -WindowStyle Hidden -argument '-NoExit -nologo -noprofile -executionpolicy bypass -command . $Appdata\listener.ps1' 
+    #start-process powershell.exe -WindowStyle Hidden -argument '-NoExit -nologo -noprofile -executionpolicy bypass -command . $Appdata\listener.ps1' 
 }
 
 # Check for version 3+ of powershell, required by "Add-Member -NotePropertyName" 
