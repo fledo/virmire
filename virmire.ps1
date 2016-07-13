@@ -1,3 +1,18 @@
+<#
+    .SYNOPSIS
+    Open files and folders with global hotkeys. 
+
+    .DESCRIPTION
+    Opens a GUI where system wide hotkeys can be configured. 
+    This requires a background listener process to be started. 
+
+    .LICENSE
+    To be pasted 
+
+    .AUTHOR
+    Teddy Wong, Fred Uggla
+#>
+
 # Path/files
 $Appdata = "$env:APPDATA\Virmire"
 $SettingsFile = "$Appdata\settings.csv"
