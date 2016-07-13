@@ -9,6 +9,22 @@ if (-not (Test-Path $Appdata)) {
 }
 $Data = Import-Csv $DataFile
 
+<#
+    .SYNOPSIS
+    Extract icon from DLL
+
+    .DESCRIPTION
+    Opens a new dialog. User choice will be saved in the parameter Button
+    object.Target. The hotkey will be enabledand the Button GUI image updated.
+    
+    .LINK
+    http://stackoverflow.com/questions/6872957/how-can-i-use-the-images-within-shell32-dll-in-my-c-sharp-project
+    https://social.technet.microsoft.com/Forums/scriptcenter/en-US/16444c7a-ad61-44a7-8c6f-b8d619381a27
+
+    .EXAMPLE
+    $Form = New-Object System.Windows.Forms.Form
+    $Form.Icon = [System.IconExtractor]::Extract("shell32.dll", 4, $true)
+#>
 $FolderIcon = @"
 using System;
 using System.Drawing;
@@ -40,7 +56,20 @@ namespace System
 	}
 }
 "@
+<#
+    .SYNOPSIS
+    Update button caption and image
 
+    .DESCRIPTION
+    Updates button if its status is enabled. Set image to icon associated
+    with target or folder icon from shell32.dll. Set text to target name.
+    
+    .PARAMETER Button
+    Object representing a hotkey. 
+
+    .EXAMPLE
+    Choose-Folder -Button $Button
+#>
 Function Update-ButtonContent {
     param (
         $Button
@@ -55,6 +84,20 @@ Function Update-ButtonContent {
     }
 }
 
+<#
+    .SYNOPSIS
+    Show file browser dialog, save choice as hotkey target
+
+    .DESCRIPTION
+    Opens a new dialog. User choice will be saved in the parameter Button
+    object.Target. The hotkey will be enabledand the Button GUI image updated.
+    
+    .PARAMETER Button
+    Object representing a hotkey.
+
+    .EXAMPLE
+    Choose-File -Button $this # $this = button clicked in GUI in click event
+#>
 Function Choose-File {
     param (
         $Button
@@ -73,6 +116,20 @@ Function Choose-File {
     }
 } 
 
+<#
+    .SYNOPSIS
+    Show folder browser dialog, save choice as hotkey target
+
+    .DESCRIPTION
+    Opens a new dialog. User choice will be saved in the parameter Button 
+    object.Target. The hotkey will be enabled and the Button GUI image updated.
+    
+    .PARAMETER Button
+    Object representing a hotkey. 
+
+    .EXAMPLE
+    Choose-Folder -Button $this # Used from within button click event
+#>
 Function Choose-Folder {
     param (
         $Button
@@ -88,7 +145,16 @@ Function Choose-Folder {
         $Button.Image = $null
     }
 }
+<#
+    .SYNOPSIS
+    Save script settings.
 
+    .DESCRIPTION
+    Saves the current settings to $Datafile and reloads the listener.
+
+    .EXAMPLE
+    Save-Data
+#>
 Function Save-Data {
     $Output = @()
     Foreach ($object in $Buttons) {
@@ -98,6 +164,16 @@ Function Save-Data {
     Load-Listener
 }
 
+<#
+    .SYNOPSIS
+    Show the Graphical User Interface
+
+    .DESCRIPTION
+    Renders entire GUI and register click events for buttons
+
+    .EXAMPLE
+    Show-GUI
+#>
 Function Show-GUI {
 
     # Form Base 
@@ -250,6 +326,16 @@ Function Show-GUI {
     $Form.ShowDialog() > $null
 }
 
+<#
+    .SYNOPSIS
+    Kill background listener
+
+    .DESCRIPTION
+    Stop the process with ID from $Appdata\pid
+
+    .EXAMPLE
+    Kill-Listener
+#>
 Function Kill-Listener {
     sleep -Milliseconds 1000
     $id = Get-Content $PidFile -ErrorAction SilentlyContinue
@@ -261,6 +347,16 @@ Function Kill-Listener {
     }
 }
 
+<#
+    .SYNOPSIS
+    Restore default settings
+
+    .DESCRIPTION
+    Deletes current settings and creates a CSV in $Appdata with default settings
+
+    .EXAMPLE
+    Set-Defaults
+#>
 function Set-Defaults {
     Kill-Listener
     Remove-Item $Appdata -Force -Recurse -ErrorAction SilentlyContinue
