@@ -1,13 +1,8 @@
-# Vars and settings
-$global:Buttons = @()
+# Paths
 $Appdata = "$env:APPDATA\Virmire"
-$DataFile = "$Appdata\data.csv"
+$DataFile = "$Appdata\settings.csv"
 $PidFile = "$Appdata\pid.txt"
 $ListenerFile = "$Appdata\listener.ps1"
-if (-not (Test-Path $Appdata)) {
-    Set-Defaults
-}
-$Data = Import-Csv $DataFile
 
 <#
     .SYNOPSIS
@@ -448,4 +443,10 @@ if ($PSVersionTable.PSVersion.Major -le 3) {
 Add-Type -TypeDefinition $FolderIcon -ReferencedAssemblies System.Drawing
 Add-Type -AssemblyName System.Windows.Forms
 
+# Load settings and show GUI
+$global:Buttons = @() # Why is this global!?
+if (-not (Test-Path $Appdata)) {
+    Set-Defaults
+}
+$Data = Import-Csv $DataFile
 Show-GUI
