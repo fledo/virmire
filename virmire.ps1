@@ -322,6 +322,12 @@ function Load-Listener {
     start-process powershell.exe -WindowStyle Hidden -argument '-NoExit -nologo -noprofile -executionpolicy bypass -command . $env:APPDATA\Keys\listener.ps1' 
 }
 
+# Check for version 3+ of powershell, required by "Add-Member -NotePropertyName" 
+if ($PSVersionTable.PSVersion.Major -le 3) {
+    Write-error "Detected version $($PSVersionTable.PSVersion.Major) of PowerShell. This script requires version 3."
+    exit
+}
+
 $global:Buttons = @()
 $Appdata = "$env:APPDATA\Keys"
 $DataFile = "$Appdata\data.csv"
