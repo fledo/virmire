@@ -316,7 +316,7 @@ Function Show-GUI {
     })
     $Form.Controls.Add($exit)
     
-    #$Form.ShowDialog() > $null
+    $Form.ShowDialog() > $null
 }
 
 <#
@@ -370,35 +370,32 @@ function Set-Defaults {
     Loads the module from the parameter or displays an
     error message with a link where it can be downloaded.
 
-    .PARAMETER Module
+    .PARAMETER Name
     Specifies the module to be loaded.
 
-    .PARAMETER Web
+    .PARAMETER URL
     Specifies where the module can be downloaded.
    
-    .PARAMETER Name
-    Specifies the name of the running script which requires the module
+    .PARAMETER RequiredBy
+    Specifies what requires the module
 
     .EXAMPLE
-    Load-Module -Module ShowUI -Web showui.codeplex.com -Name $MyInvocation.MyCommand.Name
+    Load-Module -Name ShowUI -Url showui.codeplex.com -RequiredBy $MyInvocation.MyCommand.Name
 #>
 function Load-Module {
     param (
         [Parameter(Mandatory=$true)]
-        [string]$Module,
+        [string]$Name,
         [Parameter(Mandatory=$true)]
-        [string]$Web,
-        [string]$Name = "This script"
+        [string]$URL,
+        [string]$RequiredBy = "This script"
     )
     if (-not (Get-Module $Module))
     {
         try {
-            Import-Module $Module -Force -ErrorAction Stop
+            Import-Module $Module -Force
         } catch {
-            write-host "`nError: $_" -ForegroundColor Red
-            write-host "$Name requires '$Module' to function properly. Please download it from " -NoNewLine -ForegroundColor Red
-            write-host "$Web`n" -BackgroundColor Blue
-            Exit
+            write-error "$RequiredBy requires the module '$Name'. Please download it from $URL`n"
         }
     }
 }
@@ -416,7 +413,7 @@ function Load-Module {
 #>
 function Load-Listener {
     # Make sure we have the required module and that the previous Listener is dead
-    Load-Module -Module pseventingplus -Web pseventing.codeplex.com/releases/view/66587 -Name "The background Listener process"
+    Load-Module -Name pseventingplus -Url http://pseventing.codeplex.com/releases/view/66587 -RequiredBy "The background listener process"
     Stop-Listener
     $Data = Import-Csv $SettingsFile
     "import-module pseventingplus" | Out-File -FilePath $ListenerFile -Force -Encoding UTF8
