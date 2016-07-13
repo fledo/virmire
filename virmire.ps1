@@ -1,4 +1,15 @@
-﻿$FolderIcon = @"
+# Vars and settings
+$global:Buttons = @()
+$Appdata = "$env:APPDATA\Virmire"
+$DataFile = "$Appdata\data.csv"
+$PidFile = "$Appdata\pid.txt"
+$ListenerFile = "$Appdata\listener.ps1"
+if (-not (Test-Path $Appdata)) {
+    Set-Defaults
+}
+$Data = Import-Csv $DataFile
+
+$FolderIcon = @"
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -315,28 +326,18 @@ function Load-Listener {
             Add-Content -Value "register-hotkeyevent 'ctrl+alt+$($object.Key)' -action  { start '$($object.Target)' } -global" -Path $ListenerFile
         }
     }
-    Add-Content -Value 'write-host "Keys registered. Do not close this window.`nPID: $pid. Saved to $env:APPDATA\Keys\pid.txt"' -Path $ListenerFile
-    Add-Content -Value '$pid | Out-File -FilePath "$env:APPDATA\Keys\pid.txt" -Force' -Path $ListenerFile
+    Add-Content -Value 'write-host "Keys registered. Do not close this window.`nPID: $pid. Saved to $Appdata\pid.txt"' -Path $ListenerFile
+    Add-Content -Value '$pid | Out-File -FilePath "$Appdata\pid.txt" -Force' -Path $ListenerFile
     
     # Start the Listener. Keep alive and hidden.
-    start-process powershell.exe -WindowStyle Hidden -argument '-NoExit -nologo -noprofile -executionpolicy bypass -command . $env:APPDATA\Keys\listener.ps1' 
+    start-process powershell.exe -WindowStyle Hidden -argument '-NoExit -nologo -noprofile -executionpolicy bypass -command . $Appdata\listener.ps1' 
 }
 
 # Check for version 3+ of powershell, required by "Add-Member -NotePropertyName" 
 if ($PSVersionTable.PSVersion.Major -le 3) {
     Write-error "Detected version $($PSVersionTable.PSVersion.Major) of PowerShell. This script requires version 3."
-    exit
+    #exit
 }
-
-$global:Buttons = @()
-$Appdata = "$env:APPDATA\Keys"
-$DataFile = "$Appdata\data.csv"
-$PidFile = "$Appdata\pid.txt"
-$ListenerFile = "$Appdata\listener.ps1"
-if (-not (Test-Path $Appdata)) {
-    Set-Defaults
-}
-$Data = Import-Csv $DataFile
 
 Add-Type -TypeDefinition $FolderIcon -ReferencedAssemblies System.Drawing
 Add-Type -AssemblyName System.Windows.Forms
