@@ -1,12 +1,12 @@
 What is Virmire?
-----------------
+================
 
 Virmire allows users to configure global hotkeys to open files or folders. `Ctrl`+`alt`+`F` could open **Firefox** and `ctrl`+`alt`+`c` could open the **command prompt**.
 
 How?
 ----
 
-Virmire is written in PowerShell (and thus only works on Windows) and relies on the module [PsEventingPlus](http://pseventing.codeplex.com/releases/view/66587) to register global hotkeys. Settings are by default saved in `%appdata%\virmire` and are used to create a separateba background process which listens for the configured hotkeys.
+Virmire is written in PowerShell (and thus only works on Windows) and relies on the module [PsEventingPlus](http://pseventing.codeplex.com/releases/view/66587) to register global hotkeys. Settings are by default saved in `%appdata%\virmire` and are used to create a separate background process which listens for the configured hotkeys.
  
 Dependencies
 ------------
@@ -26,7 +26,8 @@ Todo
  - Provide instructions on how to use the GUI.
  - Provide example configuration.
 
-## License
+License
+-------
 
 The MIT License (MIT)
 
