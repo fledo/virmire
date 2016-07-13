@@ -427,11 +427,11 @@ function Load-Listener {
             Add-Content -Value "register-hotkeyevent 'ctrl+alt+$($object.Key)' -action  { start '$($object.Target)' } -global" -Path $ListenerFile 
         }
     }
-    Add-Content -Value "`$pid | Out-File -FilePath '$Appdata\pid.txt' -Force" -Path $ListenerFile
-    Add-Content -Value "write-host `"Keys registered. Do not close this window.``nPID: `$pid. Saved to $Appdata\pid.txt`"" -Path $ListenerFile
+    Add-Content -Value "`$pid | Out-File -FilePath '$PidFile' -Force" -Path $ListenerFile
+    Add-Content -Value "write-host `"Keys registered. Do not close this window.``nPID: `$pid. Saved to $PidFile`"" -Path $ListenerFile
     
     # Start the Listener. Keep alive and hidden.
-    start-process powershell.exe -WindowStyle Hidden -argument '-NoExit -nologo -noprofile -executionpolicy bypass -command . $Appdata\listener.ps1' 
+    start-process powershell.exe -WindowStyle Hidden -argument "-NoExit -nologo -noprofile -executionpolicy bypass -command . '$ListenerFile'" 
 }
 
 # Check for version 3+ of powershell, required by "Add-Member -NotePropertyName" 
