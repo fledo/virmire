@@ -410,7 +410,17 @@ function Load-Module {
     }
 }
 
-# (re)load the listener file/process
+<#
+    .SYNOPSIS
+    (Re)load the background process listening for hotkeys
+
+    .DESCRIPTION
+    Write a PS script which registers a new hotkey event for each enabled key.
+    The script is then started in a hidden window with pid saved in $appdata.
+
+    .EXAMPLE
+    Load-Listener
+#>
 function Load-Listener {
     # Make sure we have the required module and that the previous Listener is dead
     Load-Module -Module pseventingplus -Web pseventing.codeplex.com/releases/view/66587 -Name "The background Listener process"   
@@ -426,7 +436,7 @@ function Load-Listener {
     Add-Content -Value "write-host `"Keys registered. Do not close this window.``nPID: `$pid. Saved to $Appdata\pid.txt`"" -Path $ListenerFile
     
     # Start the Listener. Keep alive and hidden.
-    #start-process powershell.exe -WindowStyle Hidden -argument '-NoExit -nologo -noprofile -executionpolicy bypass -command . $Appdata\listener.ps1' 
+    start-process powershell.exe -WindowStyle Hidden -argument '-NoExit -nologo -noprofile -executionpolicy bypass -command . $Appdata\listener.ps1' 
 }
 
 # Check for version 3+ of powershell, required by "Add-Member -NotePropertyName" 
