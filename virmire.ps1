@@ -425,10 +425,10 @@ function Load-Module {
         [string]$URL,
         [string]$RequiredBy = "This script"
     )
-    if (-not (Get-Module $Module))
+    if (-not (Get-Module $Name))
     {
         try {
-            Import-Module $Module -Force
+            Import-Module $Name -Force
         } catch {
             write-error "$RequiredBy requires the module '$Name'. Please download it from $URL`n"
         }
