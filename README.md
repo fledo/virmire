@@ -3,6 +3,15 @@ What is Virmire?
 
 Virmire allows users to configure global hotkeys to open files or folders. `Ctrl`+`alt`+`F` could open **Firefox** and `ctrl`+`alt`+`c` could open the **command prompt**.
 
+![Virmire GUI](https://raw.githubusercontent.com/fledo/virmire/4bed844827a435df1c4ffe100bd674530936172d/vimrire.png)
+
+Usage
+-----
+
+ - Right click buttons to choouse a target file or right click to choose a target folder.
+ - Save the configuration and start the background listener. The configuration interface can now be closed.
+ - Right/Left click to clear previous configuraiton from a single button.
+
 How?
 ----
 
@@ -23,12 +32,12 @@ Todo
 ----
 
  - Option to autostart the background listener process when a users signs in.
- - Provide instructions on how to use the GUI.
- - Provide example configuration.
+ - Link to required module in GUI.
 
 License
 -------
 
+```
 The MIT License (MIT)
 
 Copyright (c) 2016 Teddy Wong, Fred Uggla
@@ -50,3 +59,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+```
