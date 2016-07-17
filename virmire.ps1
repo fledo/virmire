@@ -184,7 +184,7 @@ Function Save-Settings {
         $Output += New-Object -TypeName PSObject -Property @{Key=$object.Key; Target=$object.Target; Status = $object.Status}
     }
     $Output | Export-Csv $SettingsFile -Force
-    Load-Listener
+    Start-Listener
 }
 
 <#
@@ -306,7 +306,7 @@ Function Show-GUI {
     $start.Top = 10
     $start.Left = 670
     $start.Add_Click({
-        Load-Listener
+        Start-Listener
     })
     $Form.Controls.Add($start)
     
@@ -444,9 +444,9 @@ function Load-Module {
     The script is then started in a hidden window with pid saved in $appdata.
 
     .EXAMPLE
-    Load-Listener
+    Start-Listener
 #>
-function Load-Listener {
+function Start-Listener {
     # Make sure we have the required module and that the previous Listener is dead
     Load-Module -Name pseventingplus -Url http://pseventing.codeplex.com/releases/view/66587 -RequiredBy "The background listener process"
     Stop-Listener
