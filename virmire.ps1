@@ -273,7 +273,12 @@ Function Show-GUI {
     $help.Left = 450
     $help.Add_Click({
         $popup = new-object -comobject wscript.shell
-        $popup.popup(" - Left click button to choose target file.`n`n - Right click to choose target folder.`n`n - Left/Right click to clear target.`n`n - When done, click save.`n`n - Start listener to enable hotkeys (this requires the powershell module PSEventing Plus, available from pseventing.codeplex.com/)`n`nFurther info at github.com/owlnical/virmire and in the README.md file.")
+        $popup.popup("Left click button to choose target file.`n 
+Right click to choose target folder.`n
+Left/Right click to clear target.`n
+When done, click save.
+Start listener to enable hotkeys (this requires the powershell module PSEventing Plus, available from pseventing.codeplex.com/)`n
+Further info at github.com/owlnical/virmire and in the README.md file.")
     })
     $Form.Controls.Add($help)
     
