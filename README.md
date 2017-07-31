@@ -11,6 +11,8 @@ Usage
  - Right click buttons to choouse a target file or right click to choose a target folder.
  - Save the configuration and start the background listener. The configuration interface can now be closed.
  - Right/Left click to clear previous configuraiton from a single button.
+ - Click save to store your settings
+ - Start Listener and test hotkeys
 
 How?
 ----
