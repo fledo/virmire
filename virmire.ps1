@@ -273,7 +273,7 @@ Function Show-GUI {
     $help.Left = 450
     $help.Add_Click({
         $popup = new-object -comobject wscript.shell
-        $popup.popup(" - Left click button to choose target file.`n - Right click to choose target folder.`n - Left/Right click to clear target.`n`nFurther info at github.com/fledo/virmire.")
+        $popup.popup(" - Left click button to choose target file.`n - Right click to choose target folder.`n - Left/Right click to clear target.`n`nFurther info at github.com/owlnical/virmire and in the README.md file.")
     })
     $Form.Controls.Add($help)
     
