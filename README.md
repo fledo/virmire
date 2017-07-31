@@ -32,7 +32,6 @@ Todo
 ----
 
  - Option to autostart the background listener process when a users signs in.
- - Link to required module in GUI.
 
 License
 -------
