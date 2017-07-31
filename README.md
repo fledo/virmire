@@ -28,11 +28,6 @@ Known issues
 
  - Global hotkeys will not work if they were registered in an elevated instance of PowerShell and you have UAC enabled. Use an unelevated instance of PowerShell.
 
-Todo
-----
-
- - Option to autostart the background listener process when a users signs in.
-
 License
 -------
 
