@@ -1,7 +1,7 @@
 What is Virmire?
 ================
 
-Virmire allows users to configure global hotkeys to open files or folders. `Ctrl`+`alt`+`F` could open **Firefox** and `ctrl`+`alt`+`c` could open the **command prompt**.
+Virmire allows users to configure global hotkeys prefixed `ctrl`+`alt`. These can be used to to open files or folders.  `ctrl`+`alt`+`F` could open **Firefox** and `ctrl`+`alt`+`c` could open the **command prompt**.
 
 ![Virmire GUI](https://raw.githubusercontent.com/fledo/virmire/4bed844827a435df1c4ffe100bd674530936172d/vimrire.png)
 
@@ -28,7 +28,7 @@ Dependencies
 Known issues
 ------------
 
- - Global hotkeys will not work if they were registered in an elevated instance of PowerShell and you have UAC enabled. Use an unelevated instance of PowerShell.
+ - Global hotkeys will not work if they were registered in an elevated instance of PowerShell and you have UAC enabled. **Do not use an elevated instance of PowerShell**.
 
 License
 -------
