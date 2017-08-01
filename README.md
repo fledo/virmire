@@ -30,6 +30,11 @@ Known issues
 
  - Global hotkeys will not work if they were registered in an elevated instance of PowerShell and you have UAC enabled. **Do not use an elevated instance of PowerShell**.
 
+
+Todo
+----
+
+ - Include oseventin plus module in repo. Install it if missing in user home dir. 
 License
 -------
 
