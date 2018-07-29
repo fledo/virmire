@@ -262,16 +262,23 @@ Function Show-GUI {
         $left += 110
     }
     
+    # Set common values for all menu buttons
+    $titles = @("Help", "Reset keys", "Start Listener", "Stop Listener", "Save", "Exit")
+    $menu = @()
+    $left = 450
+    For ($i=0; $i -lt $titles.Length; $i++) {
+        $menu += New-Object System.Windows.Forms.Button
+        $menu[$i].Text = $titles[$i]
+        $menu[$i].Width = 100
+        $menu[$i].Height = 25
+        $menu[$i].Top = 10
+        $menu[$i].Left = $left
+        $menu[$i].BackColor = [System.Drawing.Color]::LightGray
+        $left += 110
+    }
+
     # Help button
-    $help = New-Object System.Windows.Forms.Button
-    $help.BackColor = [System.Drawing.Color]::LightGray
-    #$help.FlatStyle = [System.Windows.Forms.FlatStyle]::Popup
-    $help.Text = "Help"
-    $help.Width = 100
-    $help.Height = 25
-    $help.Top = 10
-    $help.Left = 450
-    $help.Add_Click({
+    $menu[0].Add_Click({
         $popup = new-object -comobject wscript.shell
         $popup.popup("Left click button to choose target file.`n 
 Right click to choose target folder.`n
@@ -281,17 +288,9 @@ Start listener to enable hotkeys (this requires the powershell module PSEventing
 You can autostart the listener by running the listener file '$Appdata\listener.ps1' using Task Scheduler or by placing a shortcut in 'Program Files\Startup'.`n
 Further info at github.com/owlnical/virmire and in the README.md file.")
     })
-    $Form.Controls.Add($help)
-    
+
     # Reset button
-    $remove = New-Object System.Windows.Forms.Button
-    $remove.BackColor = [System.Drawing.Color]::LightGray
-    $remove.Text = "Reset keys"
-    $remove.Width = 100
-    $remove.Height = 25
-    $remove.Top = 10
-    $remove.Left = 560
-    $remove.Add_Click({
+    $menu[1].Add_Click({
         $YesNo = new-object -comobject wscript.shell
         $intAnswer = $YesNo.popup("Do you want to remove all configured hotkeys?", 0, "Remove hotkeys", 4)
         If ($intAnswer -eq 6) {
@@ -300,63 +299,34 @@ Further info at github.com/owlnical/virmire and in the README.md file.")
           $YesNo.popup("Configured keys removed. This program will now close.")
         }
     })
-    $Form.Controls.Add($remove)
-    
+
     # Start listener button
-    $start = New-Object System.Windows.Forms.Button
-    $start.BackColor = [System.Drawing.Color]::LightGray
-    $start.ForeColor = [System.Drawing.Color]::DarkGreen
-    $start.Text = "Start Listener"
-    $start.Width = 100
-    $start.Height = 25
-    $start.Top = 10
-    $start.Left = 670
-    $start.Add_Click({
+    $menu[2].ForeColor = [System.Drawing.Color]::DarkGreen
+    $menu[2].Add_Click({
         Start-Listener
     })
-    $Form.Controls.Add($start)
-    
+
     # Stop listener button
-    $stop = New-Object System.Windows.Forms.Button
-    $stop.BackColor = [System.Drawing.Color]::LightGray
-    $stop.ForeColor = [System.Drawing.Color]::DarkRed
-    $stop.Text = "Stop Listener"
-    $stop.Width = 100
-    $stop.Height = 25
-    $stop.Top = 10
-    $stop.Left = 780
-    $stop.Add_Click({
+    $menu[3].ForeColor = [System.Drawing.Color]::DarkRed
+    $menu[3].Add_Click({
         Stop-Listener
     })
-    $Form.Controls.Add($stop)
-    
+
     # Save button
-    $save = New-Object System.Windows.Forms.Button
-    $save.BackColor = [System.Drawing.Color]::LightGray
-    $save.Text = "Save"
-    $save.Width = 100
-    $save.Height = 25
-    $save.Top = 10
-    $save.Left = 890
-    $save.Add_Click({
+    $menu[4].Add_Click({
         Save-Settings
         [System.Windows.Forms.MessageBox]::Show("Data saved to $SettingsFile")
     })
-    $Form.Controls.Add($save)
-    
+
     # Exit button
-    $exit = New-Object System.Windows.Forms.Button
-    $exit.BackColor = [System.Drawing.Color]::LightGray
-    $exit.Text = "Exit"
-    $exit.Width = 100
-    $exit.Height = 25
-    $exit.Top = 10
-    $exit.Left = 1000
-    $exit.Add_Click({
+    $menu[5].Add_Click({
         $Form.Close()
     })
-    $Form.Controls.Add($exit)
-    
+
+    For ($i=0; $i -lt $menu.Length; $i++) {
+        $Form.Controls.Add($menu[$i])
+    }
+
     $Form.ShowDialog() > $null
 }
 
