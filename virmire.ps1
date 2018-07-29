@@ -97,7 +97,7 @@ Function Update-ButtonContent {
     param (
         $Button
     )
-    if ($Button.Status -eq $True) {
+    if ($Button.Target -ne "no-target") {
         if (Test-Path -Path $Button.target -PathType Leaf) {
             $Button.Image = [System.Drawing.Icon]::ExtractAssociatedIcon($Button.Target)
         } else {
@@ -130,11 +130,9 @@ Function Choose-File {
     $OpenFileDialog.filter = "All files (*.*)| *.*"
     if ($OpenFileDialog.ShowDialog() -eq "OK") {
         $Button.Target = $OpenFileDialog.FileName
-        $Button.Status = $True
         Update-ButtonContent -Button $Button
     } else {
-        $Button.Target = "null"
-        $Button.Status = $False
+        $Button.Target = "no-target"
         $Button.Image = $null
     }
 } 
@@ -160,11 +158,9 @@ Function Choose-Folder {
     $OpenFolderDialog = New-Object System.Windows.Forms.FolderBrowserDialog
     if ($OpenFolderDialog.ShowDialog() -eq "OK") {
         $Button.Target = $OpenFolderDialog.SelectedPath
-        $Button.Status = $True
         Update-ButtonContent -Button $Button
     } else {
-        $Button.Target = "null"
-        $Button.Status = $False
+        $Button.Target = "no-target"
         $Button.Image = $null
     }
 }
@@ -181,7 +177,7 @@ Function Choose-Folder {
 Function Save-Settings {
     $Output = @()
     Foreach ($object in $Buttons) {
-        $Output += New-Object -TypeName PSObject -Property @{Key=$object.Key; Target=$object.Target; Status = $object.Status}
+        $Output += New-Object -TypeName PSObject -Property @{Key=$object.Key; Target=$object.Target}
     }
     $Output | Export-Csv $SettingsFile -Force
     Start-Listener
@@ -230,19 +226,17 @@ Function Show-GUI {
     }
         $button = New-Object System.Windows.Forms.Button
         $button | Add-Member -NotePropertyName Target -NotePropertyValue $object.Target
-        $button | Add-Member -NotePropertyName Status -NotePropertyValue $object.Status
         $button | Add-Member -NotePropertyName Key -NotePropertyValue $object.Key
         $button.name = $object.Key
         $button.add_MouseDown({
-            if ($this.Status -eq $False) {
+            if ($this.Target -eq "no-target") {
                 if ($_.button -eq "Left") {
                     Choose-File -Button $this
                 } elseif ($_.button -eq "Right") {
                     Choose-Folder -Button $this
                 }
             } else {
-                $this.Target = "null"
-                $this.Status = $False
+                $this.Target = "no-target"
                 $this.Image = $null
                 $this.Text = $this.name
             }
@@ -368,7 +362,7 @@ function Set-Defaults {
     $Data = @()
     $Keys = ("Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "A", "S", "D", "F", "G", "H", "J", "K", "L", "Z", "X", "C", "V", "B", "N", "M")
     foreach ($key in $Keys) {
-        $Data += New-Object -TypeName PSObject -Property @{Key=$key; Target="null"; Status = $False}
+        $Data += New-Object -TypeName PSObject -Property @{Key=$key; Target="no-target"}
     }
     $Data | Export-Csv $SettingsFile -Force
 }
@@ -429,7 +423,7 @@ function Start-Listener {
     $Data = Import-Csv $SettingsFile
     "import-module pseventingplus" | Out-File -FilePath $ListenerFile -Force -Encoding UTF8
     Foreach ($object in $Data) {
-        if ($object.Status -eq $True){
+        if ($object.Target -ne "no-target"){
             Add-Content -Value "register-hotkeyevent 'ctrl+alt+$($object.Key)' -action  { start '$($object.Target)' } -global" -Path $ListenerFile 
         }
     }
