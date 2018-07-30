@@ -202,7 +202,7 @@ Function Show-GUI {
     $Form.Width = 1125
     $Form.Height = 420
     $Form.StartPosition = "CenterScreen"
-    $Form.BackColor = [System.Drawing.Color]::DarkGray
+    $Form.BackColor = [System.Drawing.Color]::Ivory
     $Form.Text = "Virmire"
 
     # Label
