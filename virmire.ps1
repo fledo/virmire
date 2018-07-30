@@ -35,6 +35,7 @@
 
 # Path/files
 $Appdata = "$env:APPDATA\Virmire"
+$PsEventingFile = "$Appdata\Nivot.PowerShell.Eventing.Extensions.dll"
 $SettingsFile = "$Appdata\settings.csv"
 $PidFile = "$Appdata\pid.txt"
 $ListenerFile = "$Appdata\listener.ps1"
@@ -369,44 +370,6 @@ function Set-Defaults {
 
 <#
     .SYNOPSIS
-    Tries to load a module.
-
-    .DESCRIPTION
-    Loads the module from the parameter or displays an
-    error message with a link where it can be downloaded.
-
-    .PARAMETER Name
-    Specifies the module to be loaded.
-
-    .PARAMETER URL
-    Specifies where the module can be downloaded.
-   
-    .PARAMETER RequiredBy
-    Specifies what requires the module
-
-    .EXAMPLE
-    Load-Module -Name ShowUI -Url showui.codeplex.com -RequiredBy $MyInvocation.MyCommand.Name
-#>
-function Load-Module {
-    param (
-        [Parameter(Mandatory=$true)]
-        [string]$Name,
-        [Parameter(Mandatory=$true)]
-        [string]$URL,
-        [string]$RequiredBy = "This script"
-    )
-    if (-not (Get-Module $Name))
-    {
-        try {
-            Import-Module $Name -Force
-        } catch {
-            write-error "$RequiredBy requires the module '$Name'. Please download it from $URL`n"
-        }
-    }
-}
-
-<#
-    .SYNOPSIS
     (Re)load the background process listening for hotkeys
 
     .DESCRIPTION
@@ -417,11 +380,9 @@ function Load-Module {
     Start-Listener
 #>
 function Start-Listener {
-    # Make sure we have the required module and that the previous Listener is dead
-    Load-Module -Name pseventingplus -Url http://pseventing.codeplex.com/releases/view/66587 -RequiredBy "The background listener process"
     Stop-Listener
     $Data = Import-Csv $SettingsFile
-    "import-module pseventingplus" | Out-File -FilePath $ListenerFile -Force -Encoding UTF8
+    "import-module -Name $Appdata\Nivot.PowerShell.Eventing.Extensions.dll" | Out-File -FilePath $ListenerFile -Force -Encoding UTF8
     Foreach ($object in $Data) {
         if ($object.Target -ne "no-target"){
             Add-Content -Value "register-hotkeyevent 'ctrl+alt+$($object.Key)' -action  { start '$($object.Target)' } -global" -Path $ListenerFile 
@@ -436,17 +397,20 @@ function Start-Listener {
 
 # Check for version 3+ of powershell, required by "Add-Member -NotePropertyName" 
 if ($PSVersionTable.PSVersion.Major -le 3) {
-    Write-error "Detected version $($PSVersionTable.PSVersion.Major) of PowerShell. This script requires version 3."
+    Write-error "Detected version $($PSVersionTable.PSVersion.Major) of PowerShell. Virmire requires version 3."
     exit
 }
 
 Add-Type -TypeDefinition $FolderIcon -ReferencedAssemblies System.Drawing
 Add-Type -AssemblyName System.Windows.Forms
 
-# Load settings and show GUI
+# Load settings, make sure we have the pseventingmodule and show GUI
 $global:Buttons = @() # Why is this global!?
 if (-not (Test-Path $Appdata)) {
     Set-Defaults
+}
+if (-not (Test-Path $PsEventingFile)) {
+    Copy-Item "Nivot.PowerShell.Eventing.Extensions.dll" -Destination $PsEventingFile
 }
 $Data = Import-Csv $SettingsFile
 Show-GUI
