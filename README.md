@@ -29,6 +29,7 @@ Known issues
 ------------
 
  - Global hotkeys will not work if they were registered in an elevated instance of PowerShell and you have UAC enabled. **Do not use an elevated instance of PowerShell**.
+ - Only a single keyboard layout is supported
 
 License
 -------

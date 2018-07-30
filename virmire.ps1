@@ -7,7 +7,7 @@
     This requires a background listener process to be started. 
 
     .LINK
-    https://github.com/fledo/virmire
+    https://github.com/owlnical/virmire
 
     .LICENSE
     The MIT License (MIT)
@@ -165,6 +165,7 @@ Function Choose-Folder {
         $Button.Image = $null
     }
 }
+
 <#
     .SYNOPSIS
     Save script settings.
@@ -257,7 +258,7 @@ Function Show-GUI {
         $left += 110
     }
     
-    # Set common values for all menu buttons
+    # Menu buttons
     $titles = @("Help", "Reset keys", "Start Listener", "Stop Listener", "Save", "Exit")
     $menu = @()
     $left = 450
