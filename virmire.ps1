@@ -199,11 +199,11 @@ Function Show-GUI {
 
     # Form Base 
     $Form = New-Object system.Windows.Forms.Form
-    $Form.FormBorderStyle = 'None'
-    $Form.Width = 1110
-    $Form.Height = 380
+    $Form.Width = 1125
+    $Form.Height = 420
     $Form.StartPosition = "CenterScreen"
     $Form.BackColor = [System.Drawing.Color]::DarkGray
+    $Form.Text = "Virmire"
 
     # Label
     $Font = New-Object System.Drawing.Font("Arial",18)
