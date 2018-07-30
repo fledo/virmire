@@ -279,7 +279,7 @@ Function Show-GUI {
 Right click to choose target folder.`n
 Left/Right click to clear target.`n
 When done, click save.
-Start listener to enable hotkeys (this requires the powershell module PSEventing Plus, available from pseventing.codeplex.com/)`n
+Start listener to enable hotkeys (this requires the powershell module PSEventing Plus which is included with Virmire. It's also available for download on pseventing.codeplex.com/)`n
 You can autostart the listener by running the listener file '$Appdata\listener.ps1' using Task Scheduler or by placing a shortcut in 'Program Files\Startup'.`n
 Further info at github.com/owlnical/virmire and in the README.md file.")
     })

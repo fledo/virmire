@@ -17,24 +17,19 @@ Usage
 How?
 ----
 
-Virmire is written in PowerShell (and thus only works on Windows) and relies on the module [PsEventingPlus](http://pseventing.codeplex.com/releases/view/66587) to register global hotkeys. Settings are by default saved in `%appdata%\virmire` and are used to create a separate background process which listens for the configured hotkeys.
+Virmire is written in PowerShell (and thus only works on Windows) and relies on the module [PsEventingPlus](http://pseventing.codeplex.com/releases/view/66587) to register global hotkeys. The module is included in the repo. Settings are by default saved in `%appdata%\virmire` and are used to create a separate background process which listens for the configured hotkeys.
  
 Dependencies
 ------------
 
  - PowerShell 3+
- - [PsEventingPlus module](http://pseventing.codeplex.com/releases/view/66587) which is released under the following [license](http://pseventing.codeplex.com/license).
+ - [PsEventingPlus module](http://pseventing.codeplex.com/releases/view/66587) which is released under the following [license](http://pseventing.codeplex.com/license). The module is included in the repo.
 
 Known issues
 ------------
 
  - Global hotkeys will not work if they were registered in an elevated instance of PowerShell and you have UAC enabled. **Do not use an elevated instance of PowerShell**.
 
-
-Todo
-----
-
- - Include oseventin plus module in repo. Install it if missing in user home dir. 
 License
 -------
 
